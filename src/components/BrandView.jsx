@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Sidebar from './Sidebar.jsx'
 import PageView from './PageView.jsx'
-import { TextTools } from './shared.jsx'
-import { flattenPages, findPage } from '../storage.js'
+import { TextTools, AddBar } from './shared.jsx'
+import { PAGE_TYPES } from './Blocks.jsx'
+import { flattenPages, findPage, makeBlock } from '../storage.js'
 
 export default function BrandView({ brand, pageId, onSelectPage, onChangeBrand, edit, onBackToBrands }) {
+  const [navOpen, setNavOpen] = useState(false)
   const pages = flattenPages(brand.tree)
   const page = findPage(brand.tree, pageId)
 
@@ -23,19 +25,29 @@ export default function BrandView({ brand, pageId, onSelectPage, onChangeBrand, 
     onChangeTree(tree)
   }
 
+  const selectPage = (id) => { onSelectPage(id); setNavOpen(false) }
+  const addPageBlock = (type) => {
+    if (page) onChangePage({ ...page, blocks: [...page.blocks, makeBlock(type)] })
+  }
+
   return (
-    <div className={`brand-view${edit ? ' edit' : ''}`}>
+    <div className={`brand-view${edit ? ' edit' : ''}`} style={{ '--accent': brand.accent }}>
       <Sidebar
-        brand={brand} currentPageId={pageId}
-        onSelectPage={onSelectPage} onChangeTree={onChangeTree}
+        brand={brand} currentPageId={pageId} mobileOpen={navOpen}
+        onSelectPage={selectPage} onChangeTree={onChangeTree}
         edit={edit} onBackToBrands={onBackToBrands}
       />
+      {navOpen && <div className="sidebar-backdrop" onClick={() => setNavOpen(false)} />}
+      <button className="mobile-nav-toggle" onClick={() => setNavOpen(!navOpen)}>
+        {navOpen ? '✕ Close' : '☰ Menu'}
+      </button>
       <PageView
         page={page} onChangePage={onChangePage}
-        edit={edit} pages={pages} onNavigate={onSelectPage}
+        edit={edit} pages={pages} onNavigate={selectPage}
       />
-      {edit && (
+      {edit && page && (
         <div className="edit-chrome">
+          <AddBar types={PAGE_TYPES} onAdd={addPageBlock} label="Add blocks" />
           <TextTools />
         </div>
       )}

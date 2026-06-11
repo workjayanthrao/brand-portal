@@ -1,0 +1,206 @@
+{
+  "brands": [
+    {
+      "id": "fs777zcx",
+      "name": "Amazon Now",
+      "logo": null,
+      "cardBg": "#FFFFFF",
+      "cardTextColor": "#0A202E",
+      "accent": "#00D0FA",
+      "tree": [
+        {
+          "id": "2z5owkmb",
+          "type": "folder",
+          "name": "Folder 1",
+          "children": [
+            {
+              "id": "2ygcd5ap",
+              "type": "page",
+              "name": "Brand Guidelines",
+              "blocks": [
+                {
+                  "id": "8n8skozb",
+                  "type": "image",
+                  "media": null
+                },
+                {
+                  "id": "7ya0cp76",
+                  "type": "text",
+                  "html": "The brand starts here. From our brand to their doorstep, it’s about being a part of something bigger. This is where our journey toward more consistency begins. Let’s brand together.",
+                  "style": "lead"
+                },
+                {
+                  "id": "67gigvb3",
+                  "type": "section",
+                  "title": "Pillars",
+                  "blocks": [
+                    {
+                      "id": "srf9oec8",
+                      "type": "text",
+                      "html": "It’s the job of every Amazonian to embody and continually live up to this single mission. Having one mission for all of Amazon helps us all work toward the same outcome. Although each of us contributes in different ways, the results are the same: to make Every Day Better for our customers.",
+                      "style": "body"
+                    },
+                    {
+                      "id": "hm6f4bae",
+                      "type": "image",
+                      "media": null
+                    },
+                    {
+                      "id": "tek4sv4q",
+                      "type": "callout",
+                      "title": "Callout title",
+                      "linkPageId": "",
+                      "blocks": [
+                        {
+                          "id": "ph6hos6a",
+                          "type": "text",
+                          "html": "It’s the job of every Amazonian to embody and continually live up to this single mission. Having one mission for all of Amazon helps us all work toward the same outcome. Although each of us contributes in different ways, the results are the same: to make Every Day Better for our customers.",
+                          "style": "body"
+                        },
+                        {
+                          "id": "h32jotad",
+                          "type": "threeImage",
+                          "media1": null,
+                          "media2": null,
+                          "media3": null
+                        },
+                        {
+                          "id": "plomy4d0",
+                          "type": "text",
+                          "html": "It’s the job of every Amazonian to embody and continually live up to this single mission. Having one mission for all of Amazon helps us all work toward the same outcome. Although each of us contributes in different ways, the results are the same: to make Every Day Better for our customers.",
+                          "style": "body"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "bsfvqn4v",
+                  "type": "dodont",
+                  "units": 3,
+                  "items": [
+                    {
+                      "id": "2wgrhlu0",
+                      "good": true,
+                      "media": null,
+                      "html": "It’s the job of every Amazonian to embody and continually live up to this single mission."
+                    },
+                    {
+                      "id": "llj03wuc",
+                      "good": true,
+                      "media": null,
+                      "html": "Having one mission for all of Amazon helps us all work toward the same outcome."
+                    },
+                    {
+                      "id": "lex13715",
+                      "good": false,
+                      "media": null,
+                      "html": "Although each of us contributes in different ways, the results are the same."
+                    }
+                  ]
+                },
+                {
+                  "id": "9mpxnyio",
+                  "type": "note",
+                  "html": "It’s the job of every Amazonian to embody and continually live up to this single mission. Having one mission for all of Amazon helps us all work toward the same outcome. Although each of us contributes in different ways, the results are the same: to make Every Day Better for our customers."
+                },
+                {
+                  "id": "erpvyxsg",
+                  "type": "image",
+                  "media": {
+                    "kind": "none",
+                    "src": "",
+                    "caption": "It’s the job of every Amazonian to embody and continually live up to this single mission. Having one mission for all of Amazon helps us all …"
+                  }
+                }
+              ],
+              "children": [
+                {
+                  "id": "6ubc6s2q",
+                  "type": "page",
+                  "name": "Sub-category 1",
+                  "blocks": [
+                    {
+                      "id": "xmh6jgy0",
+                      "type": "text",
+                      "html": "The brand starts here. From our brand to their doorstep, it’s about being a part of something bigger. This is where our journey toward more consistency begins. Let’s brand together.",
+                      "style": "lead"
+                    }
+                  ],
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "k95sifk2",
+              "type": "page",
+              "name": "Category 2",
+              "blocks": [
+                {
+                  "id": "wj6ni8av",
+                  "type": "textImage",
+                  "html": "The brand starts here. From our brand to their doorstep, it’s about being a part of something bigger. This is where our journey toward more consistency begins. Let’s brand together.",
+                  "html2": "It’s the job of every Amazonian to embody and continually live up to this single mission. Having one mission for all of Amazon helps us all work toward the same outcome. Although each of us contributes in different ways, the results are the same: to make Every Day Better for our customers.",
+                  "media": null
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "wyfmm7wa",
+              "type": "page",
+              "name": "Category 3",
+              "blocks": [
+                {
+                  "id": "njo3mi5t",
+                  "type": "twoImage",
+                  "media1": null,
+                  "media2": null
+                }
+              ],
+              "children": []
+            }
+          ],
+          "open": true
+        }
+      ]
+    },
+    {
+      "id": "tz3odxza",
+      "name": "Amazon Pay",
+      "logo": null,
+      "cardBg": "#FFD814",
+      "cardTextColor": "#0A202E",
+      "accent": "#FFD814",
+      "tree": [
+        {
+          "id": "eop76kes",
+          "type": "folder",
+          "name": "Folder 1",
+          "children": [
+            {
+              "id": "2bo7zlm0",
+              "type": "page",
+              "name": "Brand Guidelines",
+              "blocks": [
+                {
+                  "id": "u28oykbx",
+                  "type": "text",
+                  "html": "The brand starts here. From our brand to their doorstep, it’s about being a part of something bigger. This is where our journey toward more consistency begins. Let’s brand together.",
+                  "style": "lead"
+                },
+                {
+                  "id": "of0mmboy",
+                  "type": "image",
+                  "media": null
+                }
+              ],
+              "children": []
+            }
+          ],
+          "open": true
+        }
+      ]
+    }
+  ]
+}

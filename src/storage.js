@@ -59,7 +59,7 @@ function seedAmazonNowPage() {
   ]
 }
 
-function seed() {
+export function seed() {
   return {
     brands: [
       {
@@ -105,6 +105,21 @@ export function loadData() {
   return d
 }
 
+export function hasLocalData() {
+  try { return !!localStorage.getItem(KEY) } catch { return false }
+}
+
+/* Published content shipped with the site (public/content.json).
+   Used as the starting content for first-time visitors. */
+export async function fetchPublished() {
+  try {
+    const r = await fetch('/content.json', { cache: 'no-store' })
+    if (!r.ok) return null
+    const d = await r.json()
+    return d && Array.isArray(d.brands) ? d : null
+  } catch { return null }
+}
+
 export function saveData(d) {
   try { localStorage.setItem(KEY, JSON.stringify(d)) }
   catch (e) { console.warn('Save failed (storage may be full)', e) }
@@ -114,7 +129,7 @@ export function exportJSON(d) {
   const blob = new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' })
   const a = document.createElement('a')
   a.href = URL.createObjectURL(blob)
-  a.download = 'brand-portal-content.json'
+  a.download = 'content.json'
   a.click()
   URL.revokeObjectURL(a.href)
 }

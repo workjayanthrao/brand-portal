@@ -29,6 +29,7 @@ export default function PageView({ page, onChangePage, edit, pages, onNavigate }
           blocks={page.blocks}
           onChange={(blocks) => onChangePage({ ...page, blocks })}
           edit={edit} context="page" pages={pages} onNavigate={onNavigate}
+          showAddBar={false}
         />
       </div>
     </main>

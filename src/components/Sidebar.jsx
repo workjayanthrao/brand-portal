@@ -15,7 +15,7 @@ function BrandLogo({ brand, onClick }) {
   )
 }
 
-export default function Sidebar({ brand, currentPageId, onSelectPage, onChangeTree, edit, onBackToBrands }) {
+export default function Sidebar({ brand, currentPageId, onSelectPage, onChangeTree, edit, onBackToBrands, mobileOpen = false }) {
   const [renaming, setRenaming] = useState(null)
 
   const mutate = (fn) => {
@@ -67,7 +67,7 @@ export default function Sidebar({ brand, currentPageId, onSelectPage, onChangeTr
     const active = node.id === currentPageId
     return (
       <>
-        <div className={`nav-row${isFolder ? ' folder' : ''}${isSub ? ' sub' : ''}`}>
+        <div className={`nav-row${isFolder ? ' folder' : ''}${isSub ? ' sub' : ''}${active ? ' active' : ''}`}>
           <span className="drag">≡</span>
           {renaming === node.id ? (
             <input
@@ -85,7 +85,7 @@ export default function Sidebar({ brand, currentPageId, onSelectPage, onChangeTr
           {edit && (
             <span className="rowtools">
               <button title="Rename" onClick={() => setRenaming(node.id)}>✎</button>
-              {(isFolder || depth === 0) && <button title={isFolder ? 'Add page' : 'Add sub-page'} onClick={() => addChildPage(node.id)}>＋</button>}
+              <button title={isFolder ? 'Add page' : 'Add sub-page'} onClick={() => addChildPage(node.id)}>＋</button>
               <button title="Move up" onClick={() => moveNode(node.id, -1)}>↑</button>
               <button title="Move down" onClick={() => moveNode(node.id, 1)}>↓</button>
               <button title="Delete" onClick={() => remove(node.id)}>✕</button>
@@ -107,7 +107,7 @@ export default function Sidebar({ brand, currentPageId, onSelectPage, onChangeTr
   }
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar${mobileOpen ? ' open' : ''}`}>
       <BrandLogo brand={brand} onClick={onBackToBrands} />
       {edit && (
         <div className="sidebar-actions">

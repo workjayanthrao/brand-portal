@@ -7,8 +7,9 @@ export const SECTION_TYPES = ['text', 'image', 'twoImage', 'dodont', 'callout', 
 export const CALLOUT_TYPES = ['text', 'image', 'twoImage', 'threeImage', 'dodont']
 
 /* Renders an ordered list of blocks with editing controls + an add bar */
-export function BlockList({ blocks, onChange, edit, context, pages, onNavigate, addLabel = 'Add blocks' }) {
+export function BlockList({ blocks, onChange, edit, context, pages, onNavigate, showAddBar = true }) {
   const types = context === 'callout' ? CALLOUT_TYPES : context === 'section' ? SECTION_TYPES : PAGE_TYPES
+  const label = context === 'callout' ? 'Add block to callout' : context === 'section' ? 'Add blocks to section' : 'Add blocks'
 
   const update = (i, b) => { const next = [...blocks]; next[i] = b; onChange(next) }
   const remove = (i) => { const next = [...blocks]; next.splice(i, 1); onChange(next) }
@@ -28,7 +29,7 @@ export function BlockList({ blocks, onChange, edit, context, pages, onNavigate, 
           <Block block={b} onChange={(nb) => update(i, nb)} edit={edit} pages={pages} onNavigate={onNavigate} />
         </div>
       ))}
-      {edit && <AddBar types={types} onAdd={add} mini={context !== 'page'} label={addLabel} />}
+      {edit && showAddBar && <AddBar types={types} onAdd={add} mini={context !== 'page'} label={label} />}
     </>
   )
 }

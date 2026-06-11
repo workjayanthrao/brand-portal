@@ -74,8 +74,9 @@ a { color: var(--blue-text); }
 .brands-footer { text-align: right; padding: 24px 36px; color: rgba(255,255,255,.45); font-size: 13px; font-family: var(--text); }
 
 /* ---------- Brand view layout ---------- */
-.brand-view { display: flex; min-height: calc(100vh - 70px); }
-.sidebar { width: 300px; flex-shrink: 0; padding: 10px 0 60px 36px; }
+/* per-brand accent: --accent set inline on .brand-view, recolours all highlights */
+.brand-view { --blue: var(--accent, #00D0FA); --blue-text: var(--accent, #00BEEB); display: flex; min-height: calc(100vh - 70px); }
+.sidebar { width: 300px; flex-shrink: 0; padding: 10px 0 60px 36px; position: sticky; top: 70px; height: calc(100vh - 70px); overflow-y: auto; align-self: flex-start; background: #fff; }
 .sidebar-logo { margin-bottom: 34px; cursor: pointer; }
 .sidebar-logo img { max-width: 170px; max-height: 54px; object-fit: contain; }
 .sidebar-logo .brand-logo-text { font-size: 26px; font-weight: 700; font-family: var(--display); letter-spacing: -0.03em; }
@@ -90,8 +91,9 @@ a { color: var(--blue-text); }
 .nav-row .label { flex: 1; cursor: pointer; font-size: 15px; padding: 3px 0; border-radius: 4px; }
 .nav-row.folder .label { font-weight: 700; font-size: 17px; }
 .nav-row.sub .label { color: #8B9298; font-size: 14px; }
-.nav-row .label.active { color: var(--blue-text); }
+.nav-row .label.active { color: var(--blue-text); font-weight: 700; }
 .nav-row.folder .label.active { color: var(--ink); }
+.nav-row.active::before { content: ''; position: absolute; left: -14px; top: 4px; bottom: 4px; width: 4px; border-radius: 2px; background: var(--blue); }
 .nav-row .chev { color: var(--ink); font-size: 11px; background: none; padding: 4px; }
 .nav-row .rowtools { display: none; gap: 2px; }
 .edit .nav-row:hover .rowtools { display: flex; }
@@ -128,7 +130,7 @@ a { color: var(--blue-text); }
 .media-slot.grey { background: var(--grey-media); }
 .media-slot img, .media-slot video { width: 100%; height: 100%; object-fit: cover; display: block; }
 .media-slot .add-plus { font-size: 20px; color: var(--ink); font-family: var(--display); font-weight: 700; width: 100%; height: 100%; position: absolute; inset: 0; }
-.media-slot .media-clear { position: absolute; top: 8px; right: 8px; background: rgba(10,32,46,.65); color: #fff; border-radius: 5px; padding: 3px 8px; font-size: 11px; display: none; }
+.media-slot .media-clear { position: absolute; top: 8px; left: 8px; background: rgba(10,32,46,.65); color: #fff; border-radius: 5px; padding: 3px 8px; font-size: 11px; display: none; }
 .media-slot:hover .media-clear { display: block; }
 .media-caption { margin-top: 10px; font-size: 13.5px; color: #8B9298; font-family: var(--text); line-height: 1.5; max-width: 720px; }
 .media-caption[contenteditable="true"]:focus { outline: 1px dashed var(--blue); outline-offset: 3px; }
@@ -195,9 +197,15 @@ a { color: var(--blue-text); }
 .addbar-tiles .t-label { font-size: 10px; font-family: var(--text); color: var(--ink); }
 .addbar.mini { margin: 10px 0 0; }
 .addbar.mini .addbar-tiles button { padding: 6px 9px; min-width: 50px; }
+/* edge-to-edge add bars inside sections and callouts */
+.sec-body > .addbar, .callout-body > .addbar { width: 100%; }
+.sec-body > .addbar .addbar-panel, .callout-body > .addbar .addbar-panel { flex: 1; width: 100%; }
+.sec-body > .addbar .addbar-tiles, .callout-body > .addbar .addbar-tiles { justify-content: space-between; }
+.sec-body > .addbar .addbar-tiles button, .callout-body > .addbar .addbar-tiles button { flex: 1; }
 
 /* ---------- Edit chrome ---------- */
-.edit-chrome { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); z-index: 90; display: flex; gap: 12px; }
+.edit-chrome { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); z-index: 90; display: flex; gap: 12px; max-width: calc(100vw - 32px); overflow-x: auto; }
+.edit-chrome .addbar { margin: 0; flex-wrap: nowrap; }
 .edit-chrome .addbar-panel { box-shadow: 0 6px 24px rgba(10,32,46,.18); }
 .texttools button { font-size: 15px; font-family: var(--display); padding: 8px 14px; min-width: 48px; }
 
@@ -210,3 +218,43 @@ a { color: var(--blue-text); }
 .modal .modal-cancel { display: block; margin: 14px auto 0; color: #8B9298; font-size: 13px; }
 
 input[type="file"].hidden-file { display: none; }
+
+/* ---------- Topbar save + accent controls ---------- */
+.save-status { font-size: 12px; font-family: var(--text); color: #8B9298; }
+.save-status.flash { color: var(--do); font-weight: 700; }
+.save-btn { background: var(--ink); color: #fff; font-family: var(--display); font-weight: 700; font-size: 13px; padding: 7px 16px; border-radius: 5px; }
+.topbar.on-dark .save-btn { background: #fff; color: var(--ink); }
+.accent-pick { display: flex; align-items: center; gap: 6px; font-family: var(--display); font-weight: 700; font-size: 13px; cursor: pointer; }
+.accent-pick input[type="color"] { width: 26px; height: 26px; border: 1px solid var(--border); border-radius: 6px; padding: 1px; background: none; cursor: pointer; }
+
+/* ---------- Mobile nav ---------- */
+.mobile-nav-toggle { display: none; }
+.sidebar-backdrop { display: none; }
+
+/* ---------- Responsive (mobile = view only) ---------- */
+@media (max-width: 768px) {
+  .topbar { padding: 16px 20px; }
+  .topbar .wordmark { font-size: 18px; }
+
+  /* off-canvas sidebar */
+  .sidebar { position: fixed; top: 0; left: 0; z-index: 120; height: 100vh; width: min(85vw, 320px); padding: 24px 20px 60px 24px; transform: translateX(-105%); transition: transform .22s ease; box-shadow: 4px 0 24px rgba(10,32,46,.18); }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-backdrop { display: block; position: fixed; inset: 0; background: rgba(10,32,46,.45); z-index: 110; }
+  .mobile-nav-toggle { display: block; position: fixed; bottom: 18px; left: 18px; z-index: 130; background: var(--ink); color: #fff; font-family: var(--display); font-weight: 700; font-size: 14px; padding: 11px 18px; border-radius: 24px; box-shadow: 0 4px 16px rgba(10,32,46,.3); }
+
+  .page-area { padding: 0 20px 110px; }
+  .page-title { margin: 4px 0 28px; }
+
+  /* stack all multi-column layouts */
+  .b-textimage, .b-twoimage, .b-threeimage, .b-section,
+  .b-dodont.u2, .b-dodont.u3 { grid-template-columns: 1fr; }
+  .b-section { gap: 14px; }
+  .block { margin-bottom: 32px; }
+
+  .brands-body { padding: 4vh 6vw; }
+  .brands-footer { text-align: center; }
+
+  /* view only: hide every edit affordance defensively */
+  .editmode-btn, .edit-chrome, .addbar, .block-tools, .rowtools,
+  .sidebar-actions, .save-btn, .save-status, .accent-pick { display: none !important; }
+}

@@ -1,10 +1,11 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Login from './components/Login.jsx'
 import BrandChooser from './components/BrandChooser.jsx'
 import BrandView from './components/BrandView.jsx'
-import { loadData, saveData, exportJSON, EDIT_PASSWORD, firstPage } from './storage.js'
+import { loadData, saveData, exportJSON, EDIT_PASSWORD, firstPage, hasLocalData, fetchPublished } from './storage.js'
 
 const AUTH_KEY = 'brand-portal-authed'
+const MOBILE_QUERY = '(max-width: 768px)'
 
 export default function App() {
   const [data, setData] = useState(loadData)
@@ -12,7 +13,24 @@ export default function App() {
   const [view, setView] = useState({ screen: 'brands', brandId: null, pageId: null })
   const [editMode, setEditMode] = useState(false)
   const [editModal, setEditModal] = useState(false)
+  const [saveFlash, setSaveFlash] = useState(false)
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia(MOBILE_QUERY).matches)
   const importRef = useRef(null)
+
+  /* first visit on this browser: start from the published content.json */
+  useEffect(() => {
+    if (hasLocalData()) return
+    fetchPublished().then((d) => { if (d) { setData(d); saveData(d) } })
+  }, [])
+
+  /* mobile = view only */
+  useEffect(() => {
+    const mq = window.matchMedia(MOBILE_QUERY)
+    const onChange = () => setIsMobile(mq.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+  useEffect(() => { if (isMobile && editMode) setEditMode(false) }, [isMobile, editMode])
 
   const update = (d) => { setData(d); saveData(d) }
 
@@ -28,6 +46,13 @@ export default function App() {
   const toggleEdit = () => {
     if (editMode) setEditMode(false)
     else setEditModal(true)
+  }
+
+  /* ---- save (autosave runs on every change; this is explicit confirmation) ---- */
+  const saveNow = () => {
+    saveData(data)
+    setSaveFlash(true)
+    setTimeout(() => setSaveFlash(false), 2000)
   }
 
   /* ---- navigation ---- */
@@ -69,17 +94,32 @@ export default function App() {
       <header className={`topbar${dark ? ' on-dark' : ''}`}>
         <button className="wordmark" onClick={backToBrands}>Brand Portal</button>
         <div className="topbar-right">
+          {editMode && brand && (
+            <label className="accent-pick" title="Brand accent colour">
+              Accent
+              <input
+                type="color" value={brand.accent}
+                onChange={(e) => changeBrand({ ...brand, accent: e.target.value })}
+              />
+            </label>
+          )}
           {editMode && (
             <>
+              <span className={`save-status${saveFlash ? ' flash' : ''}`}>
+                {saveFlash ? 'Saved ✓' : 'All changes saved ✓'}
+              </span>
+              <button className="save-btn" onClick={saveNow}>Save</button>
               <button className="topbar-link" onClick={() => exportJSON(data)}>Export JSON</button>
               <button className="topbar-link" onClick={() => importRef.current.click()}>Import JSON</button>
               <input ref={importRef} type="file" accept="application/json" className="hidden-file"
                 onChange={(e) => { importFile(e.target.files[0]); e.target.value = '' }} />
             </>
           )}
-          <button className={`editmode-btn${editMode ? ' active' : ''}`} onClick={toggleEdit}>
-            ✎ {editMode ? 'Exit edit mode' : 'Edit mode'}
-          </button>
+          {!isMobile && (
+            <button className={`editmode-btn${editMode ? ' active' : ''}`} onClick={toggleEdit}>
+              ✎ {editMode ? 'Exit edit mode' : 'Edit mode'}
+            </button>
+          )}
           <button className="topbar-link" onClick={logout}>Log out</button>
         </div>
       </header>
