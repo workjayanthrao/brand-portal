@@ -227,6 +227,9 @@ input[type="file"].hidden-file { display: none; }
 /* ---------- Topbar save + accent controls ---------- */
 .save-status { font-size: 12px; font-family: var(--text); color: #8B9298; }
 .save-status.flash { color: var(--do); font-weight: 700; }
+.save-status.err { color: var(--dont, #c0392b); font-weight: 700; }
+.save-btn:disabled { opacity: .55; cursor: default; }
+.media-busy { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,.72); font-family: var(--text); font-weight: 700; font-size: 13px; color: var(--ink); z-index: 5; }
 .save-btn { background: var(--ink); color: #fff; font-family: var(--text); font-weight: 700; font-size: 13px; padding: 7px 16px; border-radius: 5px; }
 .topbar.on-dark .save-btn { background: #fff; color: var(--ink); }
 .accent-pick { display: flex; align-items: center; gap: 6px; font-family: var(--text); font-weight: 700; font-size: 13px; cursor: pointer; }

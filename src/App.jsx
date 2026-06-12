@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Login from './components/Login.jsx'
 import BrandChooser from './components/BrandChooser.jsx'
 import BrandView from './components/BrandView.jsx'
-import { loadData, saveData, exportJSON, EDIT_PASSWORD, firstPage, hasLocalData, fetchPublished } from './storage.js'
+import { loadData, saveData, exportJSON, EDIT_PASSWORD, firstPage, fetchPublished, publishContent, isDirty, clearDirty } from './storage.js'
 
 const AUTH_KEY = 'brand-portal-authed'
 const MOBILE_QUERY = '(max-width: 768px)'
@@ -13,14 +13,14 @@ export default function App() {
   const [view, setView] = useState({ screen: 'brands', brandId: null, pageId: null })
   const [editMode, setEditMode] = useState(false)
   const [editModal, setEditModal] = useState(false)
-  const [saveFlash, setSaveFlash] = useState(false)
+  const [saveState, setSaveState] = useState('idle') // idle | publishing | published | error
   const [isMobile, setIsMobile] = useState(() => window.matchMedia(MOBILE_QUERY).matches)
   const importRef = useRef(null)
 
-  /* first visit on this browser: start from the published content.json */
+  /* load the live published content, unless this browser has an unsaved draft */
   useEffect(() => {
-    if (hasLocalData()) return
-    fetchPublished().then((d) => { if (d) { setData(d); saveData(d) } })
+    if (isDirty()) return
+    fetchPublished().then((d) => { if (d) { setData(d); saveData(d, { markDirty: false }) } })
   }, [])
 
   /* mobile = view only */
@@ -48,11 +48,19 @@ export default function App() {
     else setEditModal(true)
   }
 
-  /* ---- save (autosave runs on every change; this is explicit confirmation) ---- */
-  const saveNow = () => {
+  /* ---- save & publish: drafts autosave locally; this pushes live for everyone ---- */
+  const saveNow = async () => {
     saveData(data)
-    setSaveFlash(true)
-    setTimeout(() => setSaveFlash(false), 2000)
+    setSaveState('publishing')
+    try {
+      await publishContent(data)
+      clearDirty()
+      setSaveState('published')
+    } catch (e) {
+      setSaveState('error')
+      window.alert(`Publish failed: ${e.message}\n\nYour changes are still saved in this browser. Use Export JSON as a backup if needed.`)
+    }
+    setTimeout(() => setSaveState('idle'), 2500)
   }
 
   /* ---- navigation ---- */
@@ -105,10 +113,15 @@ export default function App() {
           )}
           {editMode && (
             <>
-              <span className={`save-status${saveFlash ? ' flash' : ''}`}>
-                {saveFlash ? 'Saved ✓' : 'All changes saved ✓'}
+              <span className={`save-status${saveState === 'published' ? ' flash' : ''}${saveState === 'error' ? ' err' : ''}`}>
+                {saveState === 'publishing' ? 'Publishing…'
+                  : saveState === 'published' ? 'Published live ✓'
+                  : saveState === 'error' ? 'Publish failed ✕'
+                  : 'Drafts autosave in this browser'}
               </span>
-              <button className="save-btn" onClick={saveNow}>Save</button>
+              <button className="save-btn" onClick={saveNow} disabled={saveState === 'publishing'}>
+                Save &amp; publish
+              </button>
               <button className="topbar-link" onClick={() => exportJSON(data)}>Export JSON</button>
               <button className="topbar-link" onClick={() => importRef.current.click()}>Import JSON</button>
               <input ref={importRef} type="file" accept="application/json" className="hidden-file"

@@ -109,20 +109,47 @@ export function hasLocalData() {
   try { return !!localStorage.getItem(KEY) } catch { return false }
 }
 
-/* Published content shipped with the site (public/content.json).
-   Used as the starting content for first-time visitors. */
+/* Published content: live copy in Vercel Blob (/api/content),
+   falling back to the content.json shipped with the site. */
 export async function fetchPublished() {
-  try {
-    const r = await fetch('/content.json', { cache: 'no-store' })
-    if (!r.ok) return null
-    const d = await r.json()
-    return d && Array.isArray(d.brands) ? d : null
-  } catch { return null }
+  for (const url of ['/api/content', '/content.json']) {
+    try {
+      const r = await fetch(url, { cache: 'no-store' })
+      if (!r.ok) continue
+      const d = await r.json()
+      if (d && Array.isArray(d.brands)) return d
+    } catch { /* try next source */ }
+  }
+  return null
 }
 
-export function saveData(d) {
-  try { localStorage.setItem(KEY, JSON.stringify(d)) }
-  catch (e) { console.warn('Save failed (storage may be full)', e) }
+/* Push content live for everyone (Vercel Blob via /api/content). */
+export async function publishContent(d) {
+  const r = await fetch('/api/content', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-edit-password': EDIT_PASSWORD },
+    body: JSON.stringify(d),
+  })
+  if (!r.ok) {
+    let msg = `Publish failed (${r.status})`
+    try { msg = (await r.json()).error || msg } catch { /* keep default */ }
+    throw new Error(msg)
+  }
+}
+
+const DIRTY_KEY = 'brand-portal-dirty'
+export function isDirty() {
+  try { return localStorage.getItem(DIRTY_KEY) === '1' } catch { return false }
+}
+export function clearDirty() {
+  try { localStorage.removeItem(DIRTY_KEY) } catch { /* noop */ }
+}
+
+export function saveData(d, { markDirty = true } = {}) {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(d))
+    if (markDirty) localStorage.setItem(DIRTY_KEY, '1')
+  } catch (e) { console.warn('Local draft save failed (storage may be full)', e) }
 }
 
 export function exportJSON(d) {

@@ -1,4 +1,6 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
+import { upload } from '@vercel/blob/client'
+import { EDIT_PASSWORD } from '../storage.js'
 
 /* ---------- Rich text (contentEditable) ---------- */
 export function RichText({ html, onChange, edit, className = 'rt body', placeholder = 'Type text…', tag = 'div' }) {
@@ -25,15 +27,33 @@ export function RichText({ html, onChange, edit, className = 'rt body', placehol
 /* ---------- Media slot (image or video, with caption) ---------- */
 export function MediaSlot({ media, onChange, edit, grey = false, showCaption = true }) {
   const fileRef = useRef(null)
+  const [busy, setBusy] = useState(false)
 
-  const setFile = (file) => {
+  /* uploads the ORIGINAL file (no compression) to Vercel Blob, stores the URL */
+  const setFile = async (file) => {
     if (!file) return
-    const reader = new FileReader()
-    reader.onload = () => {
-      const kind = file.type.startsWith('video') ? 'video' : 'image'
-      onChange({ kind, src: reader.result, caption: media?.caption || '' })
+    const kind = file.type.startsWith('video') ? 'video' : 'image'
+    setBusy(true)
+    try {
+      const blob = await upload(`media/${Date.now()}-${file.name}`, file, {
+        access: 'public',
+        handleUploadUrl: '/api/upload',
+        clientPayload: EDIT_PASSWORD,
+      })
+      onChange({ kind, src: blob.url, caption: media?.caption || '' })
+    } catch (e) {
+      if (kind === 'image' && file.size <= 2.5 * 1024 * 1024) {
+        /* cloud storage unavailable: embed small images locally as a fallback */
+        const reader = new FileReader()
+        reader.onload = () => onChange({ kind, src: reader.result, caption: media?.caption || '' })
+        reader.readAsDataURL(file)
+        window.alert(`Cloud upload unavailable — the image was embedded locally instead and will only go live via Save & publish once storage is set up.\n(${e.message})`)
+      } else {
+        window.alert(`Upload failed: ${e.message}`)
+      }
+    } finally {
+      setBusy(false)
     }
-    reader.readAsDataURL(file)
   }
 
   const pasteUrl = () => {
@@ -60,6 +80,7 @@ export function MediaSlot({ media, onChange, edit, grey = false, showCaption = t
         {hasMedia && edit && (
           <button className="media-clear" onClick={() => onChange(null)}>Remove</button>
         )}
+        {busy && <div className="media-busy">Uploading…</div>}
         <input
           ref={fileRef} type="file" accept="image/*,video/*" className="hidden-file"
           onChange={(e) => { setFile(e.target.files[0]); e.target.value = '' }}
