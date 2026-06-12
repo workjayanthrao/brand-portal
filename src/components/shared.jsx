@@ -94,15 +94,15 @@ function CaptionEditor({ media, onChange, edit }) {
 
 /* ---------- Add-block bar ---------- */
 const TILE_DEFS = {
-  text: ['≡', 'text'],
-  image: ['▭', 'image'],
-  textImage: ['≡▭', 'text + image'],
-  twoImage: ['▭▭', '2 image'],
-  threeImage: ['▭▭▭', '3 image'],
-  section: ['▔▤', 'title + section'],
-  dodont: ['✓✕', "do's / don't"],
-  callout: ['ⓘ', 'callout'],
-  note: ['▪', 'note'],
+  text: ['≡', 'Text'],
+  image: ['▭', 'Image'],
+  textImage: ['≡▭', 'Text + Image'],
+  twoImage: ['▭▭', '2 Images'],
+  threeImage: ['▭▭▭', '3 Images'],
+  section: ['▔▤', 'Section'],
+  dodont: ['✓✕', "Do's / Don't"],
+  callout: ['！', 'Callout'],
+  note: ['▢', 'Note'],
 }
 
 export function AddBar({ types, onAdd, mini = false, label = 'Add blocks' }) {
@@ -137,9 +137,15 @@ export function TextTools() {
     <div className="addbar-panel texttools">
       <div className="panel-label">Text tools</div>
       <div className="addbar-tiles">
-        <button onMouseDown={(e) => { e.preventDefault(); exec('bold') }}><b>B</b></button>
-        <button onMouseDown={(e) => { e.preventDefault(); exec('italic') }}><i>i</i></button>
-        <button onMouseDown={(e) => { e.preventDefault(); exec('createLink') }}>⧉</button>
+        <button onMouseDown={(e) => { e.preventDefault(); exec('bold') }}>
+          <span className="t-ico"><b>B</b></span><span className="t-label">Bold</span>
+        </button>
+        <button onMouseDown={(e) => { e.preventDefault(); exec('italic') }}>
+          <span className="t-ico"><i>i</i></span><span className="t-label">Italic</span>
+        </button>
+        <button onMouseDown={(e) => { e.preventDefault(); exec('createLink') }}>
+          <span className="t-ico">⧉</span><span className="t-label">Hyperlink</span>
+        </button>
       </div>
     </div>
   )

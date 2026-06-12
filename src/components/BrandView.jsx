@@ -46,9 +46,9 @@ export default function BrandView({ brand, pageId, onSelectPage, onChangeBrand, 
         edit={edit} pages={pages} onNavigate={selectPage}
       />
       {edit && page && (
-        <div className="edit-chrome">
-          <AddBar types={PAGE_TYPES} onAdd={addPageBlock} label="Add blocks" />
+        <div className="edit-rail">
           <TextTools />
+          <AddBar types={PAGE_TYPES} onAdd={addPageBlock} label="Page tools" />
         </div>
       )}
     </div>

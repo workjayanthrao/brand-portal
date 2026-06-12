@@ -192,26 +192,27 @@ a { color: var(--blue-text); }
 
 /* ---------- Add-block bars & toolbars ---------- */
 .addbar { display: flex; align-items: stretch; gap: 14px; margin: 26px 0; flex-wrap: wrap; }
-.addbar-panel { background: var(--cream); border: 1px solid var(--border); border-radius: 12px; padding: 8px 10px 10px; }
-.addbar-panel .panel-label { text-align: center; font-family: var(--text); font-weight: 700; font-size: 11.5px; margin-bottom: 7px; }
-.addbar-tiles { display: flex; gap: 7px; }
-.addbar-tiles button { background: #fff; border-radius: 8px; padding: 9px 12px; display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 62px; }
-.addbar-tiles button:hover { outline: 2px solid var(--blue); }
-.addbar-tiles .t-ico { font-size: 18px; line-height: 1; }
-.addbar-tiles .t-label { font-size: 11px; font-family: var(--text); color: var(--ink); }
+.addbar-panel { background: #ECECEC; border-radius: 14px; padding: 14px 14px 16px; }
+.addbar-panel .panel-label { text-align: center; font-family: var(--text); font-weight: 700; font-size: 14px; color: var(--ink); margin-bottom: 12px; }
+.addbar-tiles { display: flex; gap: 12px; }
+.addbar-tiles button { background: transparent; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 78px; }
+.addbar-tiles .t-ico { font-size: 22px; line-height: 1; color: var(--ink); background: #fff; border-radius: 8px; width: 100%; min-height: 52px; display: flex; align-items: center; justify-content: center; padding: 12px 10px; }
+.addbar-tiles button:hover .t-ico { outline: 2px solid var(--blue); }
+.addbar-tiles .t-label { font-size: 13px; font-family: var(--text); color: var(--ink); }
 .addbar.mini { margin: 10px 0 0; }
-.addbar.mini .addbar-tiles button { padding: 6px 9px; min-width: 50px; }
 /* edge-to-edge add bars inside sections and callouts */
 .sec-body > .addbar, .callout-body > .addbar { width: 100%; }
 .sec-body > .addbar .addbar-panel, .callout-body > .addbar .addbar-panel { flex: 1; width: 100%; }
 .sec-body > .addbar .addbar-tiles, .callout-body > .addbar .addbar-tiles { justify-content: space-between; }
 .sec-body > .addbar .addbar-tiles button, .callout-body > .addbar .addbar-tiles button { flex: 1; }
 
-/* ---------- Edit chrome ---------- */
-.edit-chrome { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); z-index: 90; display: flex; gap: 12px; max-width: calc(100vw - 32px); overflow-x: auto; }
-.edit-chrome .addbar { margin: 0; flex-wrap: nowrap; }
-.edit-chrome .addbar-panel { box-shadow: 0 6px 24px rgba(10,32,46,.18); }
-.texttools button { font-size: 16px; font-family: var(--text); padding: 8px 14px; min-width: 48px; }
+/* ---------- Edit rail (sticky, right of page, edit mode only) ---------- */
+.edit-rail { width: 236px; flex-shrink: 0; position: sticky; top: 86px; align-self: flex-start; max-height: calc(100vh - 102px); overflow-y: auto; padding: 16px 20px 24px 0; display: flex; flex-direction: column; gap: 16px; }
+.edit-rail .addbar { margin: 0; }
+.edit-rail .addbar-panel { width: 100%; box-shadow: 0 6px 24px rgba(10,32,46,.12); }
+.edit-rail .addbar-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+.edit-rail .addbar-tiles button { min-width: 0; }
+.texttools .t-ico { font-size: 20px; font-family: var(--text); }
 
 /* modal */
 .modal-backdrop { position: fixed; inset: 0; background: rgba(10,32,46,.55); display: flex; align-items: center; justify-content: center; z-index: 200; }
@@ -259,6 +260,6 @@ input[type="file"].hidden-file { display: none; }
   .brands-footer { text-align: center; }
 
   /* view only: hide every edit affordance defensively */
-  .editmode-btn, .edit-chrome, .addbar, .block-tools, .rowtools,
+  .editmode-btn, .edit-rail, .addbar, .block-tools, .rowtools,
   .sidebar-actions, .save-btn, .save-status, .accent-pick { display: none !important; }
 }
